@@ -1,32 +1,38 @@
 <template>
   <!-- load & save popup -->
-  <div v-if="popupVisible">
-    <input v-model="stage" type="number" @input="stage < 1 ? stage = 1 : _, stage > wordsNum ? stage = wordsNum : _"
-      placeholder="Enter stage" />
-    <button @click="loadSeq(stage - 1), popupVisible = false">loadStage</button>
-    <div>Seed: {{ seed }}</div>
-    <div>currentStage: {{ currentWordSeq + 1 }}</div>
+  <div class="popup" v-if="popupVisible">
+    <div>
+      <div>Input Stage</div>
+      <input v-model="stage" type="number" @input="stage < 1 ? stage = 1 : _, stage > wordsNum ? stage = wordsNum : _"
+        placeholder="Enter stage" />
+      <button @click="loadSeq(stage - 1), popupVisible = false">loadStage</button>
+      <div>Seed: {{ seed }}</div>
+      <div>currentStage: {{ currentWordSeq + 1 }}</div>
+    </div>
   </div>
   <!-- wrong alert popup -->
-  <div v-if="wrongAnswerVisible">
-    <div>Wrong Answer</div>
-    <div>{{ wrongAnswerTmp[0] }}</div>
-    <div>{{ wrongAnswerTmp[1] }}</div>
-    <div>{{ wrongAnswerTmp[2] }}</div>
-    <button @click="wrongAnswerVisible = false">OK</button>
-    <div><router-link :to="'/'">Go to Main Page</router-link></div>
+  <div class="popup" v-if="wrongAnswerVisible">
+    <div>
+      <div>Wrong Answer</div>
+      <div>{{ wrongAnswerTmp[0] }}</div>
+      <div>{{ wrongAnswerTmp[1] }}</div>
+      <div>{{ wrongAnswerTmp[2] }}</div>
+      <button @click="wrongAnswerVisible = false">OK</button>
+      <div><router-link :to="'/'">Go to Main Page</router-link></div>
+    </div>
   </div>
   <!-- success popup -->
-  <div v-if="successVisible">
-    <div>Congraturations!</div>
-    <div><router-link :to="'/'">Go to Main Page</router-link></div>
+  <div class="popup" v-if="successVisible">
+    <div>
+      <div>Congraturations!</div>
+      <div><router-link :to="'/'">Go to Main Page</router-link></div>
+    </div>
   </div>
   <!-- quiz -->
-  <div>
-    <h1>Quiz Page</h1>
-    <div>[{{ currentWordSeq + 1 }}/{{ numbers.length }}]</div>
-    <button @click="popupShow">popupShow</button>
-    <div>{{ words[numbers[currentWordSeq]].kanji }}</div>
+  <div :class="{ quiz: popupVisible }">
+    <div style="display: flex; justify-content: center;">[{{ currentWordSeq + 1 }}/{{ numbers.length }}]</div>
+    <button style="margin: 0px; " @click="popupShow">popupShow</button>
+    <div class="kanji flex-center">{{ words[numbers[currentWordSeq]].kanji.replace(/\[|\]/g,'') }}</div> <!-- .split(/·|・|•/g)[0] 넣을지 고민 -->
     <!-- kanji -> kana -->
     <div v-if="false">
       <div>{{ words[numbers[currentWordSeq]].meaning }}</div>
@@ -38,17 +44,84 @@
     </div>
     <!-- kanji -> meaning -->
     <div v-if="true">
-      <div>{{ words[numbers[currentWordSeq]].kana }}</div>
-      <div v-for="i in answerIndex" :key="i">
-        <div @click="goNextStep" v-if="i === currentWordSeq">{{ words[numbers[currentWordSeq]].meaning }} {{ i }}</div>
-        <div @click="wrongAnswer" v-if="i === randomWordSeq0">{{ words[numbers[randomWordSeq0]].meaning }}</div>
-        <div @click="wrongAnswer" v-if="i === randomWordSeq1">{{ words[numbers[randomWordSeq1]].meaning }}</div>
+      <div style="display: flex; justify-content: center; font-size: 30px; height: 50px;">{{ words[numbers[currentWordSeq]].kana }}</div>
+      <div class="container" v-for="i in answerIndex" :key="i">
+        <div class="square" @click="goNextStep" v-if="i === currentWordSeq">{{ words[numbers[currentWordSeq]].meaning }}
+          {{ i }}</div>
+        <div class="square" @click="wrongAnswer" v-if="i === randomWordSeq0">{{
+          words[numbers[randomWordSeq0]].meaning
+        }}</div>
+        <div class="square" @click="wrongAnswer" v-if="i === randomWordSeq1">{{
+          words[numbers[randomWordSeq1]].meaning
+        }}</div>
       </div>
     </div>
     <button @click="goNextStep">Next Word</button>
-    <div v-for="number in numbers" :key="number">{{ number }}{{ words[number] }}</div>
+    <!-- <div v-for="number in numbers" :key="number">{{ number }}{{ words[number] }}</div> -->
   </div>
 </template>
+
+<style>
+.quiz {
+  filter: blur(4px);
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.popup>div {
+  background-color: #fff;
+  width: 30%;
+  height: 30%;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.popup>div>* {
+  margin: 10px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.kanji {
+  font-size: 100px;
+  height: 150px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.square {
+  width: 300px;
+  height: 100px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  margin: 5px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+}
+</style>
 
 <script>
 import seedrandom from 'seedrandom';
