@@ -1,38 +1,13 @@
 <template>
-  <!-- load & save popup -->
-  <div class="popup" v-if="popupVisible">
-    <div>
-      <div>Input Stage</div>
-      <input v-model="stage" type="number" @input="stage < 1 ? stage = 1 : _, stage > wordsNum ? stage = wordsNum : _"
-        placeholder="Enter stage" />
-      <button @click="loadSeq(stage - 1), popupVisible = false">loadStage</button>
-      <div>Seed: {{ seed }}</div>
-      <div>currentStage: {{ currentWordSeq + 1 }}</div>
-    </div>
-  </div>
-  <!-- wrong alert popup -->
-  <div class="popup" v-if="wrongAnswerVisible">
-    <div>
-      <div>Wrong Answer</div>
-      <div>{{ wrongAnswerTmp[0] }}</div>
-      <div>{{ wrongAnswerTmp[1] }}</div>
-      <div>{{ wrongAnswerTmp[2] }}</div>
-      <button @click="wrongAnswerVisible = false">OK</button>
-      <div><router-link :to="'/'">Go to Main Page</router-link></div>
-    </div>
-  </div>
-  <!-- success popup -->
-  <div class="popup" v-if="successVisible">
-    <div>
-      <div>Congraturations!</div>
-      <div><router-link :to="'/'">Go to Main Page</router-link></div>
-    </div>
-  </div>
+  <Popup :popupVisible="popupVisible" :wrongAnswerVisible="wrongAnswerVisible" :seed="seed"
+    :currentWordSeq="currentWordSeq" :wordsNum="words.length" :wrongAnswerTmp="wrongAnswerTmp"
+    :popupButton="popupButton" :wrongAnswerButton="wrongAnswerButton" :successVisible="successVisible" />
   <!-- quiz -->
-  <div :class="{ quiz: popupVisible }">
-    <div style="display: flex; justify-content: center;">[{{ currentWordSeq + 1 }}/{{ numbers.length }}]</div>
-    <button style="margin: 0px; " @click="popupShow">popupShow</button>
-    <div class="kanji flex-center">{{ words[numbers[currentWordSeq]].kanji.replace(/\[|\]/g,'') }}</div> <!-- .split(/·|・|•/g)[0] 넣을지 고민 -->
+  <div :class="{ quiz: popupVisible || wrongAnswerVisible || successVisible }">
+    <div class="flex-jc-center">[{{ currentWordSeq + 1 }}/{{ numbers.length }}]</div>
+    <button  @click="popupShow">popupShow</button>
+    <div class="kanji flex-center">{{ words[numbers[currentWordSeq]].kanji.replace(/\[|\]/g, '') }}</div>
+    <!-- .split(/·|・|•/g)[0] 넣을지 고민 -->
     <!-- kanji -> kana -->
     <div v-if="false">
       <div>{{ words[numbers[currentWordSeq]].meaning }}</div>
@@ -44,14 +19,18 @@
     </div>
     <!-- kanji -> meaning -->
     <div v-if="true">
-      <div style="display: flex; justify-content: center; font-size: 30px; height: 50px;">{{ words[numbers[currentWordSeq]].kana }}</div>
-      <div class="container" v-for="i in answerIndex" :key="i">
-        <div class="square" @click="goNextStep" v-if="i === currentWordSeq">{{ words[numbers[currentWordSeq]].meaning }}
+      <div class="flex-jc-center" style="font-size: 30px; height: 50px;">{{
+        words[numbers[currentWordSeq]].kana
+      }}</div>
+      <div class="flex-jc-center" v-for="i in answerIndex" :key="i">
+        <div class="answerbox" @click="goNextStep" v-if="i === currentWordSeq">{{
+          words[numbers[currentWordSeq]].meaning
+        }}
           {{ i }}</div>
-        <div class="square" @click="wrongAnswer" v-if="i === randomWordSeq0">{{
+        <div class="answerbox" @click="wrongAnswer" v-if="i === randomWordSeq0">{{
           words[numbers[randomWordSeq0]].meaning
         }}</div>
-        <div class="square" @click="wrongAnswer" v-if="i === randomWordSeq1">{{
+        <div class="answerbox" @click="wrongAnswer" v-if="i === randomWordSeq1">{{
           words[numbers[randomWordSeq1]].meaning
         }}</div>
       </div>
@@ -66,39 +45,15 @@
   filter: blur(4px);
 }
 
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.popup>div {
-  background-color: #fff;
-  width: 30%;
-  height: 30%;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.popup>div>* {
-  margin: 10px;
-}
-
 .flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.flex-jc-center {
+  display: flex;
+  justify-content: center;
 }
 
 .kanji {
@@ -106,12 +61,7 @@
   height: 150px;
 }
 
-.container {
-  display: flex;
-  justify-content: center;
-}
-
-.square {
+.answerbox {
   width: 300px;
   height: 100px;
   border: 1px solid #000;
@@ -124,6 +74,7 @@
 </style>
 
 <script>
+import Popup from './Popup.vue';
 import seedrandom from 'seedrandom';
 import wordN5 from '@/assets/data/JLPT_N5.json';
 import wordN4 from '@/assets/data/JLPT_N4.json';
@@ -132,10 +83,11 @@ import wordN2 from '@/assets/data/JLPT_N2.json';
 import wordN1 from '@/assets/data/JLPT_N1.json';
 
 export default {
+  components: {
+    Popup
+  },
   data() {
     return {
-      // stage는 1부터 시작
-      stage: 1,
       // 팝업 관련
       popupVisible: false,
       wrongAnswerVisible: false,
@@ -160,20 +112,8 @@ export default {
   },
   // created()는 Vue 인스턴스가 생성되고 나서 호출된다.
   created() {
-    const wordNumMap = {
-      N5: 744,
-      N4: 1037,
-      N3: 1546,
-      N2: 2648,
-      N1: 3246,
-    };
-    const wordMap = {
-      N5: wordN5,
-      N4: wordN4,
-      N3: wordN3,
-      N2: wordN2,
-      N1: wordN1,
-    };
+    const wordNumMap = { N5: 744, N4: 1037, N3: 1546, N2: 2648, N1: 3246, };
+    const wordMap = { N5: wordN5, N4: wordN4, N3: wordN3, N2: wordN2, N1: wordN1, };
     // difficulty 는 URL의 파라미터로 전달된다.
     const difficulty = this.$route.params.difficulty;
     if (difficulty in wordNumMap) {
@@ -267,8 +207,15 @@ export default {
       this.currentWordSeq = seq;
       this.generateRandomNumbers();
       this.suffleSeqs();
-      this.stage = seq + 1;
     },
+    // 아래 컴포넌트에서 사용되는 메소드들
+    popupButton(stage) {
+      this.loadSeq(stage - 1), this.popupVisible = false;
+    },
+    wrongAnswerButton() {
+      this.wrongAnswerVisible = false;
+    },
+
   }
 };
 </script>
