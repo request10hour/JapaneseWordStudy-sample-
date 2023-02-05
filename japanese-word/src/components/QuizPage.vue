@@ -3,71 +3,134 @@
     :currentWordSeq="currentWordSeq" :wordsNum="words.length" :wrongAnswerTmp="wrongAnswerTmp"
     :popupButton="popupButton" :wrongAnswerButton="wrongAnswerButton" :successVisible="successVisible" />
   <!-- quiz -->
-  <div :class="{ quiz: popupVisible || wrongAnswerVisible || successVisible }">
-    <div class="flex-jc-center">[{{ currentWordSeq + 1 }}/{{ numbers.length }}]</div>
-    <button  @click="popupShow">popupShow</button>
-    <div class="kanji flex-center">{{ words[numbers[currentWordSeq]].kanji.replace(/\[|\]/g, '') }}</div>
+  <div class="quiz" :class="{ quizblur: popupVisible || wrongAnswerVisible || successVisible }">
+    <div class="progress-container">
+      <div ref="progressBar" class="progress-bar"></div>
+    </div>
+    <div class="progressIndicator">[{{ currentWordSeq + 1 }}/{{ numbers.length }}]</div>
+    <div class="progressArea"></div>
+    <button class="popupButton" @click="popupShow">&lt; popupShow</button>
+    <div class="kanji">{{ words[numbers[currentWordSeq]].kanji.replace(/\[|\]/g, '').replace(/·|・|•/g, '\n') }}</div>
     <!-- .split(/·|・|•/g)[0] 넣을지 고민 -->
-    <!-- kanji -> kana -->
-    <div v-if="false">
-      <div>{{ words[numbers[currentWordSeq]].meaning }}</div>
-      <div v-for="i in answerIndex" :key="i">
-        <div @click="goNextStep" v-if="i === currentWordSeq">{{ words[numbers[currentWordSeq]].kana }} {{ i }}</div>
-        <div @click="wrongAnswer" v-if="i === randomWordSeq0">{{ words[numbers[randomWordSeq0]].kana }}</div>
-        <div @click="wrongAnswer" v-if="i === randomWordSeq1">{{ words[numbers[randomWordSeq1]].kana }}</div>
-      </div>
-    </div>
-    <!-- kanji -> meaning -->
     <div v-if="true">
-      <div class="flex-jc-center" style="font-size: 30px; height: 50px;">{{
-        words[numbers[currentWordSeq]].kana
-      }}</div>
-      <div class="flex-jc-center" v-for="i in answerIndex" :key="i">
-        <div class="answerbox" @click="goNextStep" v-if="i === currentWordSeq">{{
-          words[numbers[currentWordSeq]].meaning
-        }}
-          {{ i }}</div>
-        <div class="answerbox" @click="wrongAnswer" v-if="i === randomWordSeq0">{{
-          words[numbers[randomWordSeq0]].meaning
-        }}</div>
-        <div class="answerbox" @click="wrongAnswer" v-if="i === randomWordSeq1">{{
-          words[numbers[randomWordSeq1]].meaning
-        }}</div>
+      <!-- kanji -> kana -->
+      <div class="container">
+        <div v-for="i in answerIndex[0]" :key="i">
+          <div ref="correctAnswer" class="answerbox" @click="correctAnswer(0)" v-if="i === currentWordSeq">{{
+            words[numbers[currentWordSeq]].kana
+          }}</div>
+          <div class="answerbox" @click="wrongAnswer" v-if="i === randomWordSeq0">{{
+            words[numbers[randomWordSeq0]].kana
+          }}</div>
+          <div class="answerbox" @click="wrongAnswer" v-if="i === randomWordSeq1">{{
+            words[numbers[randomWordSeq1]].kana
+          }}</div>
+        </div>
+      </div>
+      <!-- kanji -> meaning -->
+      <div class="container" style="border-bottom: #dddddd solid 2px;">
+        <div v-for="i in answerIndex[1]" :key="i">
+          <div ref="correctAnswer" class="answerbox" @click="correctAnswer(1)" v-if="i === currentWordSeq">{{
+            words[numbers[currentWordSeq]].meaning
+          }}</div>
+          <div class="answerbox" @click="wrongAnswer" v-if="i === randomWordSeq0">{{
+            words[numbers[randomWordSeq0]].meaning
+          }}</div>
+          <div class="answerbox" @click="wrongAnswer" v-if="i === randomWordSeq1">{{
+            words[numbers[randomWordSeq1]].meaning
+          }}</div>
+        </div>
       </div>
     </div>
-    <button @click="goNextStep">Next Word</button>
+    <!-- <button @click="goNextStep">Next Word</button> -->
     <!-- <div v-for="number in numbers" :key="number">{{ number }}{{ words[number] }}</div> -->
   </div>
 </template>
 
 <style>
 .quiz {
-  filter: blur(4px);
-}
-
-.flex-center {
+  width: 100vw;
+  max-width: 500px;
+  height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.flex-jc-center {
-  display: flex;
-  justify-content: center;
+.quizblur {
+  filter: blur(4px);
+}
+
+.progress-container {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 10px;
+  background-color: #dddddd;
+}
+
+.progress-bar {
+  height: 10px;
+  background-color: #00a2ed;
+  width: 0vw;
+}
+
+.progressIndicator {
+  position: fixed;
+  top: 0;
+  margin-top: 10px;
+  height: 20px;
+}
+
+.progressArea {
+  height: 30px;
+}
+
+.popupButton {
+  position: fixed;
+  top: 30px;
+  right: 0;
+  height: 50px;
+  width: 100px;
+  border-radius: 10px 0px 0px 10px;
+  border: none;
+  background-color: #00a2ed;
+  color: white;
+  box-shadow: 0px 5px 5px #dddddd;
 }
 
 .kanji {
-  font-size: 100px;
-  height: 150px;
+  width: 100vw;
+  height: 35vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: #dddddd solid 2px;
+  font-size: 8vh;
+  white-space: pre;
+  line-height: 1.1;
+}
+
+.container {
+  width: 100vw;
+  height: 27vh;
+  background-color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-top: #dddddd solid 2px;
 }
 
 .answerbox {
-  width: 300px;
-  height: 100px;
-  border: 1px solid #000;
-  border-radius: 10px;
+  width: 30vw;
+  height: 25vh;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  box-shadow: 0 0 5px #dddddd;
   margin: 5px;
-  padding: 5px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
 }
@@ -88,6 +151,7 @@ export default {
   },
   data() {
     return {
+      correctAnswerArray: [],
       // 팝업 관련
       popupVisible: false,
       wrongAnswerVisible: false,
@@ -109,6 +173,19 @@ export default {
       // 'に', 'ぬ', 'ね', 'の', 'は', 'ば', 'ぱ', 'ひ', 'び', 'ぴ', 'ふ', 'ぶ', 'ぷ', 'へ', 'べ', 'ぺ', 'ほ', 'ぼ', 'ぽ', 'ま',
       // 'み', 'む', 'め', 'も', 'や', 'ゃ', 'ゆ', 'ゅ', 'よ', 'ょ', 'ら', 'り', 'る', 'れ', 'ろ', 'わ', ],
     };
+  },
+  watch: {
+    currentWordSeq() {
+      this.$refs.progressBar.style.width = `${(this.currentWordSeq / this.wordsNum) * 100}vw`;
+    },
+    correctAnswerArray: {
+      deep: true,
+      handler() {
+        if (this.correctAnswerArray[0] && this.correctAnswerArray[1]) {
+          this.goNextStep();
+        }
+      }
+    },
   },
   // created()는 Vue 인스턴스가 생성되고 나서 호출된다.
   created() {
@@ -167,20 +244,29 @@ export default {
     // Math.random()이 0이상 1미만의 실수를 반환하기 때문에
     // 0.166, 0.333, 0.5, 0.666, 0.833, 1.0을 기준으로 6가지 경우의 수를 나눈다.
     suffleSeqs() {
-      const randomNum = Math.random()
-      if (randomNum <= 0.166) {
-        this.answerIndex = [this.currentWordSeq, this.randomWordSeq0, this.randomWordSeq1];
-      } else if (randomNum <= 0.333) {
-        this.answerIndex = [this.currentWordSeq, this.randomWordSeq1, this.randomWordSeq0];
-      } else if (randomNum <= 0.5) {
-        this.answerIndex = [this.randomWordSeq0, this.currentWordSeq, this.randomWordSeq1];
-      } else if (randomNum <= 0.666) {
-        this.answerIndex = [this.randomWordSeq0, this.randomWordSeq1, this.currentWordSeq];
-      } else if (randomNum <= 0.833) {
-        this.answerIndex = [this.randomWordSeq1, this.currentWordSeq, this.randomWordSeq0];
-      } else {
-        this.answerIndex = [this.randomWordSeq1, this.randomWordSeq0, this.currentWordSeq];
+      for (let i = 0; i < 2; i++) {
+        const randomNum = Math.random()
+        if (randomNum <= 0.166) {
+          this.answerIndex[i] = [this.currentWordSeq, this.randomWordSeq0, this.randomWordSeq1];
+        } else if (randomNum <= 0.333) {
+          this.answerIndex[i] = [this.currentWordSeq, this.randomWordSeq1, this.randomWordSeq0];
+        } else if (randomNum <= 0.5) {
+          this.answerIndex[i] = [this.randomWordSeq0, this.currentWordSeq, this.randomWordSeq1];
+        } else if (randomNum <= 0.666) {
+          this.answerIndex[i] = [this.randomWordSeq0, this.randomWordSeq1, this.currentWordSeq];
+        } else if (randomNum <= 0.833) {
+          this.answerIndex[i] = [this.randomWordSeq1, this.currentWordSeq, this.randomWordSeq0];
+        } else {
+          this.answerIndex[i] = [this.randomWordSeq1, this.randomWordSeq0, this.currentWordSeq];
+        }
       }
+
+    },
+    correctAnswer(correctAnswerNum) {
+      const target = this.$refs['correctAnswer'][correctAnswerNum];
+      target.style.border = '1px solid #00a2ed';
+      target.style.boxShadow = '0 0 5px #00a2ed';
+      this.correctAnswerArray[correctAnswerNum] = true;
     },
     goNextStep() {
       // 마지막 단어를 맞췄을 경우 성공 팝업을 띄운다.
@@ -195,7 +281,6 @@ export default {
       this.wrongAnswerVisible = true;
       const wrongPoint = this.words[this.numbers[this.currentWordSeq]];
       this.wrongAnswerTmp = [wrongPoint.kanji, wrongPoint.kana, wrongPoint.meaning];
-      this.loadSeq(0);
     },
     wrongAnswerClose() {
       this.wrongAnswerVisible = false;
@@ -207,6 +292,7 @@ export default {
       this.currentWordSeq = seq;
       this.generateRandomNumbers();
       this.suffleSeqs();
+      this.correctAnswerArray = [false, false];
     },
     // 아래 컴포넌트에서 사용되는 메소드들
     popupButton(stage) {
@@ -214,8 +300,8 @@ export default {
     },
     wrongAnswerButton() {
       this.wrongAnswerVisible = false;
+      this.loadSeq(0);
     },
-
   }
 };
 </script>
