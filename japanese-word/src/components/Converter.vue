@@ -1,46 +1,4 @@
-<template>
-  <Converter ref="converterComponent"/>
-  <div>
-    <h1>Main Page</h1>
-    <div>
-      <div>Please enter Seed</div>
-      <input v-model="seed" placeholder="Enter Seed">
-      <div>
-        <button @click="seed = Math.round(Math.random() * 1000000)">Create Randomly Seed</button>
-      </div>
-    </div>
-    <router-link :to="'/difficulty'">Go to Difficulty Page</router-link>
-  </div>
-</template>
-
-<script>
-import Converter from './Converter.vue';
-
-export default {
-  components: {
-    Converter
-  },
-  data() {
-    return {
-      seed: ''
-    };
-  },
-  // watch는 Vue 인스턴스가 생성되고 나서 호출된다.
-  // v-model로 seed를 바인딩했기 때문에 seed가 변경되면 localStorage에 저장한다.
-  // localStorage에 저장된 seed는 다음에 페이지를 새로고침해도 유지된다.
-  watch: {
-    seed() {
-      localStorage.setItem('seed', this.seed);
-    }
-  },
-  created() {
-    // 암묵적 규칙으로 getItem()이 실패하면 null을 반환한다.
-    this.seed = localStorage.getItem('seed');
-  }
-};
-</script>
-
-<!-- <template></template>
+<template></template>
 
 <script>
 // 메모용 : /([一-龠々]+)/g 로 한자를 찾을 수 있다.
@@ -74,19 +32,20 @@ export default {
       ]
     };
   },
-  created() {
-    this.runIfKanjiAndKanaIsDifferent('[やむを得ない]', 'やむをえない');
-    console.log('N1');
-    this.testForAll(wordN1);
-    console.log('N2');
-    this.testForAll(wordN2);
-    console.log('N3');
-    this.testForAll(wordN3);
-    console.log('N4');
-    this.testForAll(wordN4);
-    console.log('N5');
-    this.testForAll(wordN5);
-  },
+  // 테스트용
+  // created() {
+  //   this.runIfKanjiAndKanaIsDifferent('[やむを得ない]', 'やむをえない');
+  //   console.log('N1');
+  //   this.testForAll(wordN1);
+  //   console.log('N2');
+  //   this.testForAll(wordN2);
+  //   console.log('N3');
+  //   this.testForAll(wordN3);
+  //   console.log('N4');
+  //   this.testForAll(wordN4);
+  //   console.log('N5');
+  //   this.testForAll(wordN5);
+  // },
   methods: {
     // 발음이 유사한 히라가나로 변환한다.
     // ex) str = '_さあ_かあ_', onVarList = chouonList, onVarKey = 'chouon'
@@ -258,13 +217,17 @@ export default {
           }
         }
         if (isHiraganaIncluded) {
-          console.log(kanji);
-          console.log(kana);
           result = this.makeVariationsOfYomigana(this.extractYomiganaByRegExp(kanji, kana));
-          console.log(result);
+          // console.log(kanji);
+          // console.log(kana);
+          // console.log(result);
+        }
+        else {
+          result = this.makeVariationsOfYomigana([[kana], [kana]]);
         }
       }
-      return result.length;
+      // result는 배열이다. 가나의 변형(문자열)이 여러개 포함되어 있다.
+      return result;
     },
     // 아래는 테스트용코드
     // 모든 단어를 전부 돌면서 2개보다 적게 생성되는 경우를 찾는다.
@@ -287,4 +250,4 @@ export default {
     }
   },
 };
-</script> -->
+</script>

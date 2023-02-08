@@ -1,4 +1,5 @@
 <template>
+  <Converter ref="converterComponent" />
   <Popup :popupVisible="popupVisible" :wrongAnswerVisible="wrongAnswerVisible" :seed="seed"
     :currentWordSeq="currentWordSeq" :wordsNum="words.length" :wrongAnswerTmp="wrongAnswerTmp"
     :popupButton="popupButton" :wrongAnswerButton="wrongAnswerButton" :successVisible="successVisible" />
@@ -13,8 +14,23 @@
     <div class="kanji">{{ words[numbers[currentWordSeq]].kanji.replace(/\[|\]/g, '').replace(/·|・|•/g, '\n') }}</div>
     <!-- .split(/·|・|•/g)[0] 넣을지 고민 -->
     <div v-if="true">
-      <!-- kanji -> kana -->
+      <!-- kanji -> kana (new) -->
       <div class="container">
+        <div v-for="i in kanaSeries" :key="i">
+          <div ref="correctAnswer" :style="{ border: styleBorder, boxShadow: styleBoxShadow }" class="answerbox"
+            @click="correctAnswer(0)" v-if="i === 0">{{
+              words[numbers[currentWordSeq]].kana.replace('-', '')
+            }}</div>
+          <div class="answerbox" @click="wrongAnswer" v-if="i === 1 && this.generatedKana[0]">{{
+            generatedKana[0]
+          }}</div>
+          <div class="answerbox" @click="wrongAnswer" v-if="i === 2 && this.generatedKana[1]">{{
+            generatedKana[1]
+          }}</div>
+        </div>
+      </div>
+      <!-- kanji -> kana (Deprecated) -->
+      <!-- <div class="container">
         <div v-for="i in answerIndex[0]" :key="i">
           <div ref="correctAnswer" class="answerbox" @click="correctAnswer(0)" v-if="i === currentWordSeq">{{
             words[numbers[currentWordSeq]].kana
@@ -26,13 +42,14 @@
             words[numbers[randomWordSeq1]].kana
           }}</div>
         </div>
-      </div>
+      </div> -->
       <!-- kanji -> meaning -->
       <div class="container" style="border-bottom: #dddddd solid 2px;">
         <div v-for="i in answerIndex[1]" :key="i">
-          <div ref="correctAnswer" class="answerbox" @click="correctAnswer(1)" v-if="i === currentWordSeq">{{
-            words[numbers[currentWordSeq]].meaning
-          }}</div>
+          <div ref="correctAnswer" :style="{ border: styleBorder, boxShadow: styleBoxShadow }" class="answerbox"
+            @click="correctAnswer(1)" v-if="i === currentWordSeq">{{
+              words[numbers[currentWordSeq]].meaning
+            }}</div>
           <div class="answerbox" @click="wrongAnswer" v-if="i === randomWordSeq0">{{
             words[numbers[randomWordSeq0]].meaning
           }}</div>
@@ -137,6 +154,7 @@
 </style>
 
 <script>
+import Converter from './Converter.vue';
 import Popup from './Popup.vue';
 import seedrandom from 'seedrandom';
 import wordN5 from '@/assets/data/JLPT_N5.json';
@@ -147,6 +165,7 @@ import wordN1 from '@/assets/data/JLPT_N1.json';
 
 export default {
   components: {
+    Converter,
     Popup
   },
   data() {
@@ -168,6 +187,10 @@ export default {
       answerIndex: [], // v-for에서 사용할 인덱스 배열
       wrongAnswerTmp: [], // 임시로 저장할 오답 배열
       // kana 문제 관련
+      kanaSeries: [0, 1, 2],
+      generatedKana: [],
+      styleBorder: '1px solid #dddddd',
+      styleBoxShadow: '0 0 5px #dddddd',
       // hiraganaSeries: ['あ', 'い', 'う', 'え', 'お', 'か', 'が', 'き', 'ぎ', 'く', 'ぐ', 'け', 'げ', 'こ', 'ご', 'さ', 'ざ',
       // 'し', 'じ', 'す', 'ず', 'せ', 'ぜ', 'そ', 'ぞ', 'た', 'だ', 'ち', 'ぢ', 'っ', 'つ', 'づ', 'て', 'で', 'と', 'ど', 'な',
       // 'に', 'ぬ', 'ね', 'の', 'は', 'ば', 'ぱ', 'ひ', 'び', 'ぴ', 'ふ', 'ぶ', 'ぷ', 'へ', 'べ', 'ぺ', 'ほ', 'ぼ', 'ぽ', 'ま',
@@ -225,6 +248,19 @@ export default {
         temporaryValue = this.numbers[currentIndex];
         this.numbers[currentIndex] = this.numbers[randomIndex];
         this.numbers[randomIndex] = temporaryValue;
+      }
+    },
+    // kanaSeries를 랜덤한 순서로 배열한다.
+    generateRandomNumbersForKana() {
+      let currentIndex = this.kanaSeries.length;
+      let temporaryValue, randomIndex;
+
+      while (0 != currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = this.kanaSeries[currentIndex];
+        this.kanaSeries[currentIndex] = this.kanaSeries[randomIndex];
+        this.kanaSeries[randomIndex] = temporaryValue;
       }
     },
     // 중복되지 않는 랜덤한 숫자를 생성한다.
@@ -289,10 +325,22 @@ export default {
       this.popupVisible = !this.popupVisible;
     },
     loadSeq(seq) {
+      this.styleBorder = '1px solid #dddddd';
+      this.styleBoxShadow = '0 0 5px #dddddd';
+
       this.currentWordSeq = seq;
+      this.generateRandomNumbersForKana();
       this.generateRandomNumbers();
       this.suffleSeqs();
       this.correctAnswerArray = [false, false];
+      this.$nextTick(() => {
+        this.generatedKana = this.$refs.converterComponent.runIfKanjiAndKanaIsDifferent(this.words[this.numbers[this.currentWordSeq]].kanji, this.words[this.numbers[this.currentWordSeq]].kana);
+        // generatedKana 배열의 요소의 순서를 섞는다.
+        for (let i = this.generatedKana.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [this.generatedKana[i], this.generatedKana[j]] = [this.generatedKana[j], this.generatedKana[i]];
+        }
+      });
     },
     // 아래 컴포넌트에서 사용되는 메소드들
     popupButton(stage) {

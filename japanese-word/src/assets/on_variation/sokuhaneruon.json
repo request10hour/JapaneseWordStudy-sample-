@@ -1,0 +1,357 @@
+[
+    {
+        "original": "あ",
+        "sokuon": "あっ",
+        "haneruon": "あん"
+    },
+    {
+        "original": "い",
+        "sokuon": "いっ",
+        "haneruon": "いん"
+    },
+    {
+        "original": "う",
+        "sokuon": "うっ",
+        "haneruon": "うん"
+    },
+    {
+        "original": "え",
+        "sokuon": "えっ",
+        "haneruon": "えん"
+    },
+    {
+        "original": "お",
+        "sokuon": "おっ",
+        "haneruon": "おん"
+    },
+    {
+        "original": "か",
+        "sokuon": "かっ",
+        "haneruon": "かん"
+    },
+    {
+        "original": "き",
+        "sokuon": "きっ",
+        "haneruon": "きん"
+    },
+    {
+        "original": "く",
+        "sokuon": "くっ",
+        "haneruon": "くん"
+    },
+    {
+        "original": "け",
+        "sokuon": "けっ",
+        "haneruon": "けん"
+    },
+    {
+        "original": "こ",
+        "sokuon": "こっ",
+        "haneruon": "こん"
+    },
+    {
+        "original": "が",
+        "sokuon": "がっ",
+        "haneruon": "がん"
+    },
+    {
+        "original": "ぎ",
+        "sokuon": "ぎっ",
+        "haneruon": "ぎん"
+    },
+    {
+        "original": "ぐ",
+        "sokuon": "ぐっ",
+        "haneruon": "ぐん"
+    },
+    {
+        "original": "げ",
+        "sokuon": "げっ",
+        "haneruon": "げん"
+    },
+    {
+        "original": "ご",
+        "sokuon": "ごっ",
+        "haneruon": "ごん"
+    },
+    {
+        "original": "さ",
+        "sokuon": "さっ",
+        "haneruon": "さん"
+    },
+    {
+        "original": "し",
+        "sokuon": "しっ",
+        "haneruon": "しん"
+    },
+    {
+        "original": "す",
+        "sokuon": "すっ",
+        "haneruon": "すん"
+    },
+    {
+        "original": "せ",
+        "sokuon": "せっ",
+        "haneruon": "せん"
+    },
+    {
+        "original": "そ",
+        "sokuon": "そっ",
+        "haneruon": "そん"
+    },
+    {
+        "original": "ざ",
+        "sokuon": "ざっ",
+        "haneruon": "ざん"
+    },
+    {
+        "original": "じ",
+        "sokuon": "じっ",
+        "haneruon": "じん"
+    },
+    {
+        "original": "ず",
+        "sokuon": "ずっ",
+        "haneruon": "ずん"
+    },
+    {
+        "original": "ぜ",
+        "sokuon": "ぜっ",
+        "haneruon": "ぜん"
+    },
+    {
+        "original": "ぞ",
+        "sokuon": "ぞっ",
+        "haneruon": "ぞん"
+    },
+    {
+        "original": "た",
+        "sokuon": "たっ",
+        "haneruon": "たん"
+    },
+    {
+        "original": "ち",
+        "sokuon": "ちっ",
+        "haneruon": "ちん"
+    },
+    {
+        "original": "つ",
+        "sokuon": "つっ",
+        "haneruon": "つん"
+    },
+    {
+        "original": "て",
+        "sokuon": "てっ",
+        "haneruon": "てん"
+    },
+    {
+        "original": "と",
+        "sokuon": "とっ",
+        "haneruon": "とん"
+    },
+    {
+        "original": "だ",
+        "sokuon": "だっ",
+        "haneruon": "だん"
+    },
+    {
+        "original": "ぢ",
+        "sokuon": "ぢっ",
+        "haneruon": "ぢん"
+    },
+    {
+        "original": "づ",
+        "sokuon": "づっ",
+        "haneruon": "づん"
+    },
+    {
+        "original": "で",
+        "sokuon": "でっ",
+        "haneruon": "でん"
+    },
+    {
+        "original": "ど",
+        "sokuon": "どっ",
+        "haneruon": "どん"
+    },
+    {
+        "original": "な",
+        "sokuon": "なっ",
+        "haneruon": "なん"
+    },
+    {
+        "original": "に",
+        "sokuon": "にっ",
+        "haneruon": "にん"
+    },
+    {
+        "original": "ぬ",
+        "sokuon": "ぬっ",
+        "haneruon": "ぬん"
+    },
+    {
+        "original": "ね",
+        "sokuon": "ねっ",
+        "haneruon": "ねん"
+    },
+    {
+        "original": "の",
+        "sokuon": "のっ",
+        "haneruon": "のん"
+    },
+    {
+        "original": "は",
+        "sokuon": "はっ",
+        "haneruon": "はん"
+    },
+    {
+        "original": "ひ",
+        "sokuon": "ひっ",
+        "haneruon": "ひん"
+    },
+    {
+        "original": "ふ",
+        "sokuon": "ふっ",
+        "haneruon": "ふん"
+    },
+    {
+        "original": "へ",
+        "sokuon": "へっ",
+        "haneruon": "へん"
+    },
+    {
+        "original": "ほ",
+        "sokuon": "ほっ",
+        "haneruon": "ほん"
+    },
+    {
+        "original": "ば",
+        "sokuon": "ばっ",
+        "haneruon": "ばん"
+    },
+    {
+        "original": "び",
+        "sokuon": "びっ",
+        "haneruon": "びん"
+    },
+    {
+        "original": "ぶ",
+        "sokuon": "ぶっ",
+        "haneruon": "ぶん"
+    },
+    {
+        "original": "べ",
+        "sokuon": "べっ",
+        "haneruon": "べん"
+    },
+    {
+        "original": "ぼ",
+        "sokuon": "ぼっ",
+        "haneruon": "ぼん"
+    },
+    {
+        "original": "ぱ",
+        "sokuon": "ぱっ",
+        "haneruon": "ぱん"
+    },
+    {
+        "original": "ぴ",
+        "sokuon": "ぴっ",
+        "haneruon": "ぴん"
+    },
+    {
+        "original": "ぷ",
+        "sokuon": "ぷっ",
+        "haneruon": "ぷん"
+    },
+    {
+        "original": "ぺ",
+        "sokuon": "ぺっ",
+        "haneruon": "ぺん"
+    },
+    {
+        "original": "ぽ",
+        "sokuon": "ぽっ",
+        "haneruon": "ぽん"
+    },
+    {
+        "original": "ま",
+        "sokuon": "まっ",
+        "haneruon": "まん"
+    },
+    {
+        "original": "み",
+        "sokuon": "みっ",
+        "haneruon": "みん"
+    },
+    {
+        "original": "む",
+        "sokuon": "むっ",
+        "haneruon": "むん"
+    },
+    {
+        "original": "め",
+        "sokuon": "めっ",
+        "haneruon": "めん"
+    },
+    {
+        "original": "も",
+        "sokuon": "もっ",
+        "haneruon": "もん"
+    },
+    {
+        "original": "や",
+        "sokuon": "やっ",
+        "haneruon": "やん"
+    },
+    {
+        "original": "ゆ",
+        "sokuon": "ゆっ",
+        "haneruon": "ゆん"
+    },
+    {
+        "original": "よ",
+        "sokuon": "よっ",
+        "haneruon": "よん"
+    },
+    {
+        "original": "ら",
+        "sokuon": "らっ",
+        "haneruon": "らん"
+    },
+    {
+        "original": "り",
+        "sokuon": "りっ",
+        "haneruon": "りん"
+    },
+    {
+        "original": "る",
+        "sokuon": "るっ",
+        "haneruon": "るん"
+    },
+    {
+        "original": "れ",
+        "sokuon": "れっ",
+        "haneruon": "れん"
+    },
+    {
+        "original": "ろ",
+        "sokuon": "ろっ",
+        "haneruon": "ろん"
+    },
+    {
+        "original": "わ",
+        "sokuon": "わっ",
+        "haneruon": "わん"
+    },
+    {
+        "original": "を",
+        "sokuon": "をっ",
+        "haneruon": "をん"
+    },
+    {
+        "original": "ん",
+        "sokuon": "んっ",
+        "haneruon": "んん"
+    }
+]

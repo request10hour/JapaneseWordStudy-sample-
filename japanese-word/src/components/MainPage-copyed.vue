@@ -1,5 +1,4 @@
 <template>
-  <Converter ref="converterComponent"/>
   <div>
     <h1>Main Page</h1>
     <div>
@@ -14,12 +13,7 @@
 </template>
 
 <script>
-import Converter from './Converter.vue';
-
 export default {
-  components: {
-    Converter
-  },
   data() {
     return {
       seed: ''
