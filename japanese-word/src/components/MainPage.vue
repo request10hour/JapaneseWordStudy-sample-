@@ -1,5 +1,4 @@
 <template>
-  <Converter ref="converterComponent"/>
   <div>
     <h1>Main Page</h1>
     <div>
@@ -14,12 +13,9 @@
 </template>
 
 <script>
-import Converter from './Converter.vue';
+import { mergeHangul, separateHangul } from '@/assets/hangul.js';
 
 export default {
-  components: {
-    Converter
-  },
   data() {
     return {
       seed: ''
@@ -36,6 +32,8 @@ export default {
   created() {
     // 암묵적 규칙으로 getItem()이 실패하면 null을 반환한다.
     this.seed = localStorage.getItem('seed');
+    console.log(mergeHangul('ㄱ','ㅏ','ㅇ'));
+    console.log(separateHangul('스'));
   }
 };
 </script>

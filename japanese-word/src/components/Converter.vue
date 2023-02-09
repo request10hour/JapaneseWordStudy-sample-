@@ -21,7 +21,8 @@ import handakuonList from '@/assets/on_variation/handakuon.json';
 export default {
   data() {
     return {
-      onvarNameKey: [
+      // var to original
+      onvarNameKey0: [
         [chouonList, 'chouon',],
         [exchouonList, 'exchouon',],
         [sokuhaneruonList, 'sokuon',],
@@ -29,23 +30,32 @@ export default {
         [yoonList, 'yoon',],
         [dakuonList, 'dakuon',],
         [handakuonList, 'handakuon',],
+      ],
+      // original to var
+      onvarNameKey1: [
+        // [chouonList, 'chouon',],
+        // [exchouonList, 'exchouon',],
+        // [sokuhaneruonList, 'sokuon',],
+        // [sokuhaneruonList, 'haneruon',],
+        [yoonList, 'yoon',],
+        [dakuonList, 'dakuon',],
+        [handakuonList, 'handakuon',],
       ]
     };
   },
   // 테스트용
-  // created() {
-  //   this.runIfKanjiAndKanaIsDifferent('[やむを得ない]', 'やむをえない');
-  //   console.log('N1');
-  //   this.testForAll(wordN1);
-  //   console.log('N2');
-  //   this.testForAll(wordN2);
-  //   console.log('N3');
-  //   this.testForAll(wordN3);
-  //   console.log('N4');
-  //   this.testForAll(wordN4);
-  //   console.log('N5');
-  //   this.testForAll(wordN5);
-  // },
+  created() {
+    //   console.log('N1');
+    //   this.testForAll(wordN1);
+    //   console.log('N2');
+    //   this.testForAll(wordN2);
+    //   console.log('N3');
+    //   this.testForAll(wordN3);
+    //   console.log('N4');
+    //   this.testForAll(wordN4);
+    //   console.log('N5');
+    //   this.testForAll(wordN5);
+  },
   methods: {
     // 발음이 유사한 히라가나로 변환한다.
     // ex) str = '_さあ_かあ_', onVarList = chouonList, onVarKey = 'chouon'
@@ -169,9 +179,9 @@ export default {
       let yomigana = arrMatchResult[1];
       for (let i = 0; i < match.length; i++) {
         if (match[i] != '') {
-          // origin to onvar
-          for (let j = 0; j < this.onvarNameKey.length; j++) {
-            let convertResults = this.convertOriginToOnVar(match[i], this.onvarNameKey[j][0], this.onvarNameKey[j][1]);
+          // onvar to origin
+          for (let j = 0; j < this.onvarNameKey0.length; j++) {
+            let convertResults = this.convertOnVarToOrigin(match[i], this.onvarNameKey0[j][0], this.onvarNameKey0[j][1]);
             if (convertResults.length != 0) {
               convertResults.forEach((item) => {
                 const temp = [...yomigana]
@@ -180,9 +190,9 @@ export default {
               });
             }
           }
-          // onvar to origin
-          for (let j = 0; j < this.onvarNameKey.length; j++) {
-            let convertResults = this.convertOnVarToOrigin(match[i], this.onvarNameKey[j][0], this.onvarNameKey[j][1]);
+          // origin to onvar
+          for (let j = 0; j < this.onvarNameKey1.length; j++) {
+            let convertResults = this.convertOriginToOnVar(match[i], this.onvarNameKey1[j][0], this.onvarNameKey1[j][1]);
             if (convertResults.length != 0) {
               convertResults.forEach((item) => {
                 const temp = [...yomigana]

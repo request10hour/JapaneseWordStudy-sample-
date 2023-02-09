@@ -21,10 +21,10 @@
             @click="correctAnswer(0)" v-if="i === 0">{{
               words[numbers[currentWordSeq]].kana.replace('-', '')
             }}</div>
-          <div class="answerbox" @click="wrongAnswer" v-if="i === 1 && this.generatedKana[0]">{{
+          <div class="answerbox" @click="wrongAnswer" v-if="i === 1 && generatedKana[0]">{{
             generatedKana[0]
           }}</div>
-          <div class="answerbox" @click="wrongAnswer" v-if="i === 2 && this.generatedKana[1]">{{
+          <div class="answerbox" @click="wrongAnswer" v-if="i === 2 && generatedKana[1]">{{
             generatedKana[1]
           }}</div>
         </div>
@@ -334,7 +334,17 @@ export default {
       this.suffleSeqs();
       this.correctAnswerArray = [false, false];
       this.$nextTick(() => {
-        this.generatedKana = this.$refs.converterComponent.runIfKanjiAndKanaIsDifferent(this.words[this.numbers[this.currentWordSeq]].kanji, this.words[this.numbers[this.currentWordSeq]].kana);
+        const kanji = this.words[this.numbers[this.currentWordSeq]].kanji;
+        const kana = this.words[this.numbers[this.currentWordSeq]].kana;
+        let onceResult = this.$refs.converterComponent.runIfKanjiAndKanaIsDifferent(kanji, kana);
+        let twiceResult = [];
+        for (let i = 0; i < onceResult.length; i++) {
+          twiceResult = twiceResult.concat(this.$refs.converterComponent.runIfKanjiAndKanaIsDifferent(kanji, onceResult[i]));
+        }
+        this.generatedKana = onceResult.concat(twiceResult);
+        // 중복 제거
+        this.generatedKana = this.generatedKana.filter((x, i, self) => self.indexOf(x) === i);
+        this.generatedKana = this.generatedKana.filter((x) => x !== kana.replace('-', ''));
         // generatedKana 배열의 요소의 순서를 섞는다.
         for (let i = this.generatedKana.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -344,6 +354,11 @@ export default {
     },
     // 아래 컴포넌트에서 사용되는 메소드들
     popupButton(stage) {
+      if (stage < 1){
+        this.loadSeq(0);
+        this.popupVisible = false;
+        return;
+      }
       this.loadSeq(stage - 1), this.popupVisible = false;
     },
     wrongAnswerButton() {

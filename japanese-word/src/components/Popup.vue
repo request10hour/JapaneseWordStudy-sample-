@@ -3,7 +3,7 @@
     <div class="popup" v-if="popupVisible">
         <div>
             <div>Input Stage</div>
-            <input v-model="stage" type="number" @input="stage < 1 ? stage = 1 : _, stage > wordsNum ? stage = wordsNum : _,
+            <input v-model="stage" type="number" @input="stage > wordsNum ? stage = wordsNum : _,
             stage % 1 != 0 ? stage -= stage % 1 : _" style="text-align: center;" placeholder="Enter stage" />
             <button @click="popupButton(stage)">loadStage</button>
             <div>Seed: {{ seed }}</div>
