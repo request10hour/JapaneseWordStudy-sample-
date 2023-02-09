@@ -3,9 +3,11 @@
     <div class="popup" v-if="popupVisible">
         <div>
             <div>Input Stage</div>
-            <input v-model="stage" type="number" @input="stage > wordsNum ? stage = wordsNum : _,
-            stage % 1 != 0 ? stage -= stage % 1 : _" style="text-align: center;" placeholder="Enter stage" />
-            <button @click="popupButton(stage)">loadStage</button>
+            <form @submit.prevent="popupButton(stage)">
+                <input v-model="stage" type="number" @input="stage > wordsNum ? stage = wordsNum : _,
+                stage % 1 != 0 ? stage -= stage % 1 : _" style="text-align: center;" placeholder="Enter stage" />
+                <button>loadStage</button>
+            </form>
             <div>Seed: {{ seed }}</div>
             <div>currentStage: {{ currentWordSeq + 1 }}</div>
         </div>

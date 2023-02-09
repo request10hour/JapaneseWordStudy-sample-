@@ -8,25 +8,35 @@
     <div class="progress-container">
       <div ref="progressBar" class="progress-bar"></div>
     </div>
-    <div class="progressIndicator">[{{ currentWordSeq + 1 }}/{{ numbers.length }}]</div>
+    <div class="progressIndicator" @click="developerMode++">[{{ currentWordSeq + 1 }}/{{ numbers.length }}]</div>
     <div class="progressArea"></div>
-    <button class="popupButton" @click="popupShow">&lt; popupShow</button>
-    <div class="kanji">{{ words[numbers[currentWordSeq]].kanji.replace(/\[|\]/g, '').replace(/·|・|•/g, '\n') }}</div>
+    <div class="kanji" style="position: relative;">
+      <div>{{ words[numbers[currentWordSeq]].kanji.replace(/\[|\]/g, '').replace(/·|・|•/g, '\n') }}</div>
+      <label style="position: absolute; top: 0; left: 0px; border-radius: 0px 0px 5px 0px;"
+        class="flex-center-center inButton" :class="{ yellowBackground: showKorean }" for="showKorean">Show
+        Korean</label>
+      <input type="checkbox" id="showKorean" v-model="showKorean" style="width: 0; height: 0; margin: 0;" />
+      <button style="position: absolute; top: 0; right: 0px; border-radius: 0px 0px 0px 5px;" class="inButton"
+        @click="popupShow">&lt; Show Popup</button>
+    </div>
     <!-- .split(/·|・|•/g)[0] 넣을지 고민 -->
     <div v-if="true">
       <!-- kanji -> kana (new) -->
       <div class="container">
-        <div v-for="i in kanaSeries" :key="i">
-          <div ref="correctAnswer" :style="{ border: styleBorder, boxShadow: styleBoxShadow }" class="answerbox"
-            @click="correctAnswer(0)" v-if="i === 0">{{
+        <div v-for="i in randomKanaOrder" :key="i">
+          <div ref="correctAnswer" :style="{ border: styleBorder, boxShadow: styleBoxShadow }"
+            class="answerbox flex-column-center-start" @click="correctAnswer(0)" v-if="i === 0">{{
               words[numbers[currentWordSeq]].kana.replace('-', '')
-            }}</div>
-          <div class="answerbox" @click="wrongAnswer" v-if="i === 1 && generatedKana[0]">{{
+            }}<div v-if="showKorean">{{ kanaKorean[0] }}</div>
+          </div>
+          <div class="answerbox flex-column-center-start" @click="wrongAnswer" v-if="i === 1 && generatedKana[0]">{{
             generatedKana[0]
-          }}</div>
-          <div class="answerbox" @click="wrongAnswer" v-if="i === 2 && generatedKana[1]">{{
+          }}<div v-if="showKorean">{{ kanaKorean[1] }}</div>
+          </div>
+          <div class="answerbox flex-column-center-start" @click="wrongAnswer" v-if="i === 2 && generatedKana[1]">{{
             generatedKana[1]
-          }}</div>
+          }}<div v-if="showKorean">{{ kanaKorean[2] }}</div>
+          </div>
         </div>
       </div>
       <!-- kanji -> kana (Deprecated) -->
@@ -59,7 +69,7 @@
         </div>
       </div>
     </div>
-    <!-- <button @click="goNextStep">Next Word</button> -->
+    <button v-if="developerMode >= 10" @click="goNextStep">Next Word</button>
     <!-- <div v-for="number in numbers" :key="number">{{ number }}{{ words[number] }}</div> -->
   </div>
 </template>
@@ -104,17 +114,17 @@
   height: 30px;
 }
 
-.popupButton {
-  position: fixed;
-  top: 30px;
-  right: 0;
-  height: 50px;
-  width: 100px;
-  border-radius: 10px 0px 0px 10px;
-  border: none;
+.inButton {
+  color: #fff;
   background-color: #00a2ed;
-  color: white;
+  padding: 7px;
   box-shadow: 0px 5px 5px #dddddd;
+  font-size: 2vh;
+  border: none;
+}
+
+.yellowBackground {
+  background-color: #edc200;
 }
 
 .kanji {
@@ -124,7 +134,7 @@
   justify-content: center;
   align-items: center;
   border-top: #dddddd solid 2px;
-  font-size: 8vh;
+  font-size: 7vh;
   white-space: pre;
   line-height: 1.1;
 }
@@ -151,9 +161,23 @@
   display: flex;
   align-items: center;
 }
+
+.flex-center-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-column-center-start {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start
+}
 </style>
 
 <script>
+import { kanaToHangulFunc } from '@/assets/hangul.js';
 import Converter from './Converter.vue';
 import Popup from './Popup.vue';
 import seedrandom from 'seedrandom';
@@ -170,6 +194,8 @@ export default {
   },
   data() {
     return {
+      developerMode : 0,
+      showKorean: false,
       correctAnswerArray: [],
       // 팝업 관련
       popupVisible: false,
@@ -187,8 +213,9 @@ export default {
       answerIndex: [], // v-for에서 사용할 인덱스 배열
       wrongAnswerTmp: [], // 임시로 저장할 오답 배열
       // kana 문제 관련
-      kanaSeries: [0, 1, 2],
+      randomKanaOrder: [0, 1, 2],
       generatedKana: [],
+      kanaKorean: ['', '', ''],
       styleBorder: '1px solid #dddddd',
       styleBoxShadow: '0 0 5px #dddddd',
       // hiraganaSeries: ['あ', 'い', 'う', 'え', 'お', 'か', 'が', 'き', 'ぎ', 'く', 'ぐ', 'け', 'げ', 'こ', 'ご', 'さ', 'ざ',
@@ -252,15 +279,15 @@ export default {
     },
     // kanaSeries를 랜덤한 순서로 배열한다.
     generateRandomNumbersForKana() {
-      let currentIndex = this.kanaSeries.length;
+      let currentIndex = this.randomKanaOrder.length;
       let temporaryValue, randomIndex;
 
       while (0 != currentIndex) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
-        temporaryValue = this.kanaSeries[currentIndex];
-        this.kanaSeries[currentIndex] = this.kanaSeries[randomIndex];
-        this.kanaSeries[randomIndex] = temporaryValue;
+        temporaryValue = this.randomKanaOrder[currentIndex];
+        this.randomKanaOrder[currentIndex] = this.randomKanaOrder[randomIndex];
+        this.randomKanaOrder[randomIndex] = temporaryValue;
       }
     },
     // 중복되지 않는 랜덤한 숫자를 생성한다.
@@ -344,17 +371,24 @@ export default {
         this.generatedKana = onceResult.concat(twiceResult);
         // 중복 제거
         this.generatedKana = this.generatedKana.filter((x, i, self) => self.indexOf(x) === i);
+        // generatedKana에서 문자열 처음에 '-'가 있는 경우 제거한다. (N4 枚 -> -まい에서 오류 발견)
+        for (let i = 0; i < this.generatedKana.length; i++) {
+          this.generatedKana[i] = this.generatedKana[i].replace('-', '');
+        }
         this.generatedKana = this.generatedKana.filter((x) => x !== kana.replace('-', ''));
         // generatedKana 배열의 요소의 순서를 섞는다.
         for (let i = this.generatedKana.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [this.generatedKana[i], this.generatedKana[j]] = [this.generatedKana[j], this.generatedKana[i]];
         }
+        this.kanaKorean[0] = kanaToHangulFunc(kana.replace('-', ''));
+        this.kanaKorean[1] = kanaToHangulFunc(this.generatedKana[0]);
+        this.kanaKorean[2] = kanaToHangulFunc(this.generatedKana[1]);
       });
     },
     // 아래 컴포넌트에서 사용되는 메소드들
     popupButton(stage) {
-      if (stage < 1){
+      if (stage < 1) {
         this.loadSeq(0);
         this.popupVisible = false;
         return;

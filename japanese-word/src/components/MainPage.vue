@@ -1,20 +1,30 @@
 <template>
-  <div>
+  <div class="main flex-column-center-center">
     <h1>Main Page</h1>
-    <div>
-      <div>Please enter Seed</div>
-      <input v-model="seed" placeholder="Enter Seed">
-      <div>
-        <button @click="seed = Math.round(Math.random() * 1000000)">Create Randomly Seed</button>
-      </div>
-    </div>
-    <router-link :to="'/difficulty'">Go to Difficulty Page</router-link>
+    <div>Please enter Seed</div>
+    <div style="color: #666;">"Order of the questions depends on Seed value"</div>
+    <button @click="createRandomSeed">Create Randomly Seed</button>
+    <form @submit.prevent="goDifficultyPage">
+      <input style="text-align: center;" v-model="seed" placeholder="Enter Seed">
+      <button type="submit">Go to Difficulty Page</button>
+    </form>
   </div>
 </template>
 
-<script>
-import { mergeHangul, separateHangul } from '@/assets/hangul.js';
+<style>
+.main>* {
+  margin: 30px;
+}
 
+.flex-column-center-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+</style>
+
+<script>
 export default {
   data() {
     return {
@@ -32,8 +42,16 @@ export default {
   created() {
     // 암묵적 규칙으로 getItem()이 실패하면 null을 반환한다.
     this.seed = localStorage.getItem('seed');
-    console.log(mergeHangul('ㄱ','ㅏ','ㅇ'));
-    console.log(separateHangul('스'));
+  },
+  methods: {
+    // seed를 랜덤으로 생성한다.
+    createRandomSeed() {
+      this.seed = Math.round(Math.random() * 1000000);
+    },
+    // /difficulty로 이동한다.
+    goDifficultyPage() {
+      this.$router.push('/difficulty');
+    }
   }
 };
 </script>
