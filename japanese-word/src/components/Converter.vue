@@ -37,7 +37,7 @@ export default {
         // [exchouonList, 'exchouon',],
         // [sokuhaneruonList, 'sokuon',],
         // [sokuhaneruonList, 'haneruon',],
-        [yoonList, 'yoon',],
+        // [yoonList, 'yoon',],
         [dakuonList, 'dakuon',],
         [handakuonList, 'handakuon',],
       ]
