@@ -1,19 +1,27 @@
 <template>
   <div class="main flex-column-center-center">
-    <h1>Main Page</h1>
-    <div>Please enter Seed</div>
-    <div style="color: #666;">"Order of the questions depends on Seed value"</div>
-    <button @click="createRandomSeed">Create Randomly Seed</button>
-    <form @submit.prevent="goDifficultyPage">
-      <input style="text-align: center;" v-model="seed" placeholder="Enter Seed">
-      <button type="submit">Go to Difficulty Page</button>
-    </form>
+    <div style="flex-grow: 2;"></div>
+    <div class="flex-column-center-center" style="flex-grow: 2;">
+      <h1 style="margin-top: 0;">Main Page</h1>
+      <div>Please enter Seed</div>
+      <div style="color: #666; text-align: center;">"Order of the questions depends on Seed value"</div>
+      <button class="random-seed cursor-pointer yellow" @click="createRandomSeed">Random Seed</button>
+      <form class="flex-column-center-center" @submit.prevent="goDifficultyPage">
+        <div>
+          <label for="seed">Seed </label>
+          <input style="text-align: center; width: 70px;" v-model="seed" placeholder="Enter Seed">
+        </div>
+        <button class="selection cursor-pointer blue" type="submit">Go to Difficulty Page</button>
+      </form>
+    </div>
+    <div style="flex-grow: 2;"></div>
   </div>
 </template>
 
 <style>
-.main>* {
-  margin: 30px;
+.main {
+  width: 100vw;
+  height: 100vh;
 }
 
 .flex-column-center-center {
@@ -21,6 +29,34 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.random-seed {
+  width: 160px;
+  height: 40px;
+  background-color: #edc200;
+  color: #fff;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0px 5px 5px #dddddd;
+  border: none;
+}
+
+.selection {
+  width: 200px;
+  height: 50px;
+  background-color: #00a2ed;
+  color: #fff;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0px 5px 5px #dddddd;
+  border: none;
 }
 </style>
 

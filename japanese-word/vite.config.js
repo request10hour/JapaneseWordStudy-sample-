@@ -11,10 +11,10 @@ export default defineConfig({
   VitePWA({
     registerType: 'autoUpdate',
     manifest: {
-      name: 'My Awesome App',
-      short_name: 'MyApp',
-      description: 'My Awesome App description',
-      theme_color: '#ffffff',
+      name: '일본어 단어 공부',
+      short_name: '일본어 단어',
+      description: '일본어 단어 공부 웹앱입니다',
+      theme_color: '#00a2ed',
       icons: [
         {
           src: 'pwa-192x192.png',

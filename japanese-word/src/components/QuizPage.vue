@@ -13,11 +13,12 @@
     <div class="kanji" style="position: relative;">
       <div>{{ words[numbers[currentWordSeq]].kanji.replace(/\[|\]/g, '').replace(/·|・|•/g, '\n') }}</div>
       <label style="position: absolute; top: 0; left: 0px; border-radius: 0px 0px 5px 0px;"
-        class="flex-center-center inButton" :class="{ yellowBackground: showKorean }" for="showKorean">Show
+        class="flex-center-center inButton cursor-pointer" :class="{ yellowBackground: showKorean }"
+        for="showKorean">Show
         Korean</label>
       <input type="checkbox" id="showKorean" v-model="showKorean" style="width: 0; height: 0; margin: 0;" />
-      <button style="position: absolute; top: 0; right: 0px; border-radius: 0px 0px 0px 5px;" class="inButton"
-        @click="popupShow">&lt; Show Popup</button>
+      <button style="position: absolute; top: 0; right: 0px; border-radius: 0px 0px 0px 5px;"
+        class="inButton cursor-pointer blue" @click="popupShow">&lt; Show Popup</button>
     </div>
     <!-- .split(/·|・|•/g)[0] 넣을지 고민 -->
     <div v-if="true">
@@ -25,17 +26,19 @@
       <div class="container">
         <div v-for="i in randomKanaOrder" :key="i">
           <div ref="correctAnswer" :style="{ border: styleBorder, boxShadow: styleBoxShadow }"
-            class="answerbox flex-column-center-start" @click="correctAnswer(0)" v-if="i === 0">{{
+            class="answerbox flex-column-center-start cursor-pointer" @click="correctAnswer(0)" v-if="i === 0">{{
               words[numbers[currentWordSeq]].kana.replace('-', '')
             }}<div v-if="showKorean">{{ kanaKorean[0] }}</div>
           </div>
-          <div class="answerbox flex-column-center-start" @click="wrongAnswer" v-if="i === 1 && generatedKana[0]">{{
-            generatedKana[0]
-          }}<div v-if="showKorean">{{ kanaKorean[1] }}</div>
+          <div class="answerbox flex-column-center-start cursor-pointer" @click="wrongAnswer"
+            v-if="i === 1 && generatedKana[0]">{{
+  generatedKana[0]
+            }}<div v-if="showKorean">{{ kanaKorean[1] }}</div>
           </div>
-          <div class="answerbox flex-column-center-start" @click="wrongAnswer" v-if="i === 2 && generatedKana[1]">{{
-            generatedKana[1]
-          }}<div v-if="showKorean">{{ kanaKorean[2] }}</div>
+          <div class="answerbox flex-column-center-start cursor-pointer" @click="wrongAnswer"
+            v-if="i === 2 && generatedKana[1]">{{
+  generatedKana[1]
+            }}<div v-if="showKorean">{{ kanaKorean[2] }}</div>
           </div>
         </div>
       </div>
@@ -56,14 +59,14 @@
       <!-- kanji -> meaning -->
       <div class="container" style="border-bottom: #dddddd solid 2px;">
         <div v-for="i in answerIndex[1]" :key="i">
-          <div ref="correctAnswer" :style="{ border: styleBorder, boxShadow: styleBoxShadow }" class="answerbox"
-            @click="correctAnswer(1)" v-if="i === currentWordSeq">{{
+          <div ref="correctAnswer" :style="{ border: styleBorder, boxShadow: styleBoxShadow }"
+            class="answerbox cursor-pointer" @click="correctAnswer(1)" v-if="i === currentWordSeq">{{
               words[numbers[currentWordSeq]].meaning
             }}</div>
-          <div class="answerbox" @click="wrongAnswer" v-if="i === randomWordSeq0">{{
+          <div class="answerbox cursor-pointer" @click="wrongAnswer" v-if="i === randomWordSeq0">{{
             words[numbers[randomWordSeq0]].meaning
           }}</div>
-          <div class="answerbox" @click="wrongAnswer" v-if="i === randomWordSeq1">{{
+          <div class="answerbox cursor-pointer" @click="wrongAnswer" v-if="i === randomWordSeq1">{{
             words[numbers[randomWordSeq1]].meaning
           }}</div>
         </div>
@@ -194,7 +197,7 @@ export default {
   },
   data() {
     return {
-      developerMode : 0,
+      developerMode: 0,
       showKorean: false,
       correctAnswerArray: [],
       // 팝업 관련

@@ -2,7 +2,8 @@
   <div class="difficulty-page">
     <h1 style="margin-top: 0;">Difficulty Page</h1>
     <!-- routing to each quiz page -->
-    <div class="selection" v-for="n in [...Array(5)].map((_, i) => 5 - i)" @click="goToQuizPage('N' + n)">Go to N{{ n }}
+    <div class="selection cursor-pointer blue" v-for="n in [...Array(5)].map((_, i) => 5 - i)"
+      @click="goToQuizPage('N' + n)">Go to N{{ n }}
       Quiz Page</div>
   </div>
 </template>

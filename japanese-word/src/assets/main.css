@@ -6,3 +6,15 @@ body {
     margin: 0;
     background-color: #eeeeee;
   }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.yellow:active {
+  background-color: #00a2ed;
+}
+
+.blue:active {
+  background-color: #edc200;
+}

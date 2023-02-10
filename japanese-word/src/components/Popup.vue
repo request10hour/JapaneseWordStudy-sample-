@@ -2,11 +2,14 @@
     <!-- load & save popup -->
     <div class="popup" v-if="popupVisible">
         <div>
-            <div>Input Stage</div>
-            <form @submit.prevent="popupButton(stage)">
-                <input v-model="stage" type="number" @input="stage > wordsNum ? stage = wordsNum : _,
-                stage % 1 != 0 ? stage -= stage % 1 : _" style="text-align: center;" placeholder="Enter stage" />
-                <button>loadStage</button>
+            <form class="flex-column-center-center" @submit.prevent="popupButton(stage)">
+                <div>
+                    <label for="stage">Input Stage </label>
+                    <input v-model="stage" type="number" @input="stage > wordsNum ? stage = wordsNum : _,
+                    stage % 1 != 0 ? stage -= stage % 1 : _" style="text-align: center; width: 70px;"
+                        placeholder="Enter stage" />
+                </div>
+                <button class="selection cursor-pointer blue">loadStage</button>
             </form>
             <div>Seed: {{ seed }}</div>
             <div>currentStage: {{ currentWordSeq + 1 }}</div>
@@ -20,8 +23,8 @@
             <div>{{ wrongAnswerTmp[0].replace(/\[|\]/g, '') }}</div>
             <div>{{ wrongAnswerTmp[1] }}</div>
             <div>{{ wrongAnswerTmp[2] }}</div>
-            <button @click="wrongAnswerButton">Back to the First stage</button>
-            <div><router-link :to="'/'">Go to Main Page</router-link></div>
+            <button class="selection cursor-pointer blue" @click="wrongAnswerButton">Back to the First stage</button>
+            <router-link :to="'/'">Go to Main Page</router-link>
         </div>
     </div>
     <!-- success popup -->
@@ -63,6 +66,26 @@
 
 .popup>div>* {
     margin: 10px;
+}
+
+.selection {
+    width: 200px;
+    height: 50px;
+    background-color: #00a2ed;
+    color: #fff;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0px 5px 5px #dddddd;
+}
+
+/* input-number 버튼 없애기 */
+input::-webkit-inner-spin-button {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
 }
 </style>
 
