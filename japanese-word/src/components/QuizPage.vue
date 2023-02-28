@@ -1,8 +1,8 @@
 <template>
   <Converter ref="converterComponent" />
   <Popup :popupVisible="popupVisible" :wrongAnswerVisible="wrongAnswerVisible" :seed="seed"
-    :currentWordSeq="currentWordSeq" :wordsNum="words.length" :wrongAnswerTmp="wrongAnswerTmp"
-    :popupButton="popupButton" :wrongAnswerButton="wrongAnswerButton" :successVisible="successVisible" />
+    :currentWordSeq="currentWordSeq" :wordsNum="words.length" :wrongAnswerTmp="wrongAnswerTmp" :popupButton="popupButton"
+    :wrongAnswerButton="wrongAnswerButton" :successVisible="successVisible" />
   <!-- quiz -->
   <div class="quiz" :class="{ quizblur: popupVisible || wrongAnswerVisible || successVisible }">
     <div class="progress-container">
@@ -13,8 +13,7 @@
     <div class="kanji" style="position: relative;">
       <div>{{ words[numbers[currentWordSeq]].kanji.replace(/\[|\]/g, '').replace(/·|・|•/g, '\n') }}</div>
       <label style="position: absolute; top: 0; left: 0px; border-radius: 0px 0px 5px 0px;"
-        class="flex-center-center inButton cursor-pointer" :class="{ yellowBackground: showKorean }"
-        for="showKorean">Show
+        class="flex-center-center inButton cursor-pointer" :class="{ yellowBackground: showKorean }" for="showKorean">Show
         Korean</label>
       <input type="checkbox" id="showKorean" v-model="showKorean" style="width: 0; height: 0; margin: 0;" />
       <button style="position: absolute; top: 0; right: 0px; border-radius: 0px 0px 0px 5px;"
@@ -32,12 +31,12 @@
           </div>
           <div class="answerbox flex-column-center-start cursor-pointer" @click="wrongAnswer"
             v-if="i === 1 && generatedKana[0]">{{
-  generatedKana[0]
+              generatedKana[0]
             }}<div v-if="showKorean">{{ kanaKorean[1] }}</div>
           </div>
           <div class="answerbox flex-column-center-start cursor-pointer" @click="wrongAnswer"
             v-if="i === 2 && generatedKana[1]">{{
-  generatedKana[1]
+              generatedKana[1]
             }}<div v-if="showKorean">{{ kanaKorean[2] }}</div>
           </div>
         </div>
@@ -60,15 +59,21 @@
       <div class="container" style="border-bottom: #dddddd solid 2px;">
         <div v-for="i in answerIndex[1]" :key="i">
           <div ref="correctAnswer" :style="{ border: styleBorder, boxShadow: styleBoxShadow }"
-            class="answerbox cursor-pointer" @click="correctAnswer(1)" v-if="i === currentWordSeq">{{
-              words[numbers[currentWordSeq]].meaning
-            }}</div>
-          <div class="answerbox cursor-pointer" @click="wrongAnswer" v-if="i === randomWordSeq0">{{
-            words[numbers[randomWordSeq0]].meaning
-          }}</div>
-          <div class="answerbox cursor-pointer" @click="wrongAnswer" v-if="i === randomWordSeq1">{{
-            words[numbers[randomWordSeq1]].meaning
-          }}</div>
+            class="answerbox cursor-pointer" @click="correctAnswer(1)" v-if="i === currentWordSeq">
+            <span v-if="words[numbers[currentWordSeq]].wordclass != '품사없음'">{{ words[numbers[currentWordSeq]].wordclass
+            }}</span>
+            {{ words[numbers[currentWordSeq]].meaning.replace(words[numbers[currentWordSeq]].wordclass, '') }}
+          </div>
+          <div class="answerbox cursor-pointer" @click="wrongAnswer" v-if="i === randomWordSeq0">
+            <span v-if="words[numbers[randomWordSeq0]].wordclass != '품사없음'">{{ words[numbers[randomWordSeq0]].wordclass
+            }}</span>
+            {{ words[numbers[randomWordSeq0]].meaning.replace(words[numbers[randomWordSeq0]].wordclass, '') }}
+          </div>
+          <div class="answerbox cursor-pointer" @click="wrongAnswer" v-if="i === randomWordSeq1">
+            <span v-if="words[numbers[randomWordSeq1]].wordclass != '품사없음'">{{ words[numbers[randomWordSeq1]].wordclass
+            }}</span>
+            {{ words[numbers[randomWordSeq1]].meaning.replace(words[numbers[randomWordSeq1]].wordclass, '') }}
+          </div>
         </div>
       </div>
     </div>
@@ -162,7 +167,13 @@
   margin: 5px;
   border-radius: 10px;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+}
+
+.answerbox span {
+  color: #00a2ed;
 }
 
 .flex-center-center {
