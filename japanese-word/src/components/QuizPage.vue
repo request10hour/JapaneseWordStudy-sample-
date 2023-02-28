@@ -293,16 +293,8 @@ export default {
     },
     // kanaSeries를 랜덤한 순서로 배열한다.
     generateRandomNumbersForKana() {
-      let currentIndex = this.randomKanaOrder.length;
-      let temporaryValue, randomIndex;
-
-      while (0 != currentIndex) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = this.randomKanaOrder[currentIndex];
-        this.randomKanaOrder[currentIndex] = this.randomKanaOrder[randomIndex];
-        this.randomKanaOrder[randomIndex] = temporaryValue;
-      }
+      const randArrList = [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]];
+      this.randomKanaOrder = randArrList[Math.floor(Math.random() * randArrList.length)];
     },
     // 중복되지 않는 랜덤한 숫자를 생성한다.
     // currentWordSeq, randomWordSeq0, randomWordSeq1 중 중복되는 숫자가 없어야 한다.
