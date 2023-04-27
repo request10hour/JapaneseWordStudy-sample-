@@ -90,7 +90,7 @@ export default {
         // },
         // retu
         setUrl() {
-            this.url = `https://hanja.dict.naver.com/#/search?query=${this.kanji}`;
+            this.url = `https://ja.dict.naver.com/#/search?query=${this.kanji}`;
         },
         openUrl() {
             window.open(this.url);
