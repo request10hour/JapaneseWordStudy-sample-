@@ -13,6 +13,7 @@
         </div>
         <button class="selection cursor-pointer blue" type="submit">Go to Difficulty Page</button>
       </form>
+      <button class="selection cursor-pointer blue" @click="goSubpage">Go to Continuous Page</button>
     </div>
     <div style="flex-grow: 2;"></div>
   </div>
@@ -87,6 +88,9 @@ export default {
     // /difficulty로 이동한다.
     goDifficultyPage() {
       this.$router.push('/difficulty');
+    },
+    goSubpage() {
+      this.$router.push('/continuous');
     }
   }
 };
